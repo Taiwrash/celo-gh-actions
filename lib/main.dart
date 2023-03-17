@@ -1,0 +1,149 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_web3_basic/components/components.dart';
+import 'package:flutter_web3_basic/constant.dart';
+import 'package:flutter_web3_basic/controller/controller.dart';
+import 'package:provider/provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider<WalletController>(
+        create: (_) => WalletController(),
+      )
+    ], child: const MyApp()),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Web3 CELO',
+      theme: ThemeData(
+          primarySwatch: const MaterialColor(0xFFFCFF51, {
+        50: Color.fromRGBO(255, 255, 229, 1),
+        100: Color.fromRGBO(254, 255, 179, 1),
+        200: Color.fromRGBO(253, 255, 128, 1),
+        300: Color.fromRGBO(252, 255, 77, 1),
+        400: Color.fromRGBO(251, 255, 26, 1),
+        500: Color.fromRGBO(226, 230, 0, 1),
+        600: Color.fromRGBO(175, 179, 0, 1),
+        700: Color.fromRGBO(125, 128, 0, 1),
+        800: Color.fromRGBO(75, 77, 0, 1),
+        900: Color.fromRGBO(25, 26, 0, 1),
+      })),
+      debugShowCheckedModeBanner: false,
+      home: const SplashPage(),
+    );
+  }
+}
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    WalletController walletController = context.watch<WalletController>();
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Center(
+            child: Text(
+              'Welcome to Simmple Forum App',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+          TextButton(
+            child: Container(
+              height: 40,
+              width: 200,
+              decoration: const BoxDecoration(
+                  color: GlobalColors.primary,
+                  borderRadius: BorderRadius.all(Radius.circular(6))),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Center(
+                child: Text(
+                  'Connect to continue',
+                  style: TextStyle(fontSize: 20.0, color: Colors.black),
+                ),
+              ),
+            ),
+            onPressed: () {
+              walletController.connectWallet(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    WalletController walletController = context.watch<WalletController>();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body: Column(
+          children: [
+            if (walletController.forums != null &&
+                walletController.forums!.isNotEmpty)
+              Expanded(
+                child: ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  itemCount: walletController.forums!.length,
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 10,
+                  ),
+                  itemBuilder: (context, index) =>
+                      Message(forum: walletController.forums![index]),
+                ),
+              )
+            else
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Center(
+                      child: Text(
+                        'Be the first to comment',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            const ChatInputField(),
+          ],
+        ));
+  }
+}
