@@ -26,7 +26,7 @@ jobs:
       - name: Build release APK
         run: flutter build apk --release
       - name: Authenticate Service Account
-      - run: |
+        run: |
           echo "Adding Service Account Key"
           echo "Adding Service Account Key"
           # uses: google-github-actions/auth@v0.3.0
