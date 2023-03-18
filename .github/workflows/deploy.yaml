@@ -26,22 +26,26 @@ jobs:
       - name: Build release APK
         run: flutter build apk --release
       - name: Authenticate Service Account
-        # uses: google-github-actions/auth@v0.3.0
-        echo "Adding Service Account Key"
-        with:
+      - run: |
           echo "Adding Service Account Key"
+          echo "Adding Service Account Key"
+          # uses: google-github-actions/auth@v0.3.0
+          # with:
           # credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
       - name: Upload APK to Google Drive
-        echo "Uploading APK to Google Drive"
+        run: |
+          echo "Uploading APK to Google Drive"
+          echo "APK successfully uploaded to GDrive"
         # uses: peaceiris/actions-gdrive@v2.0.4
         # with:
           # path: ${{ env.APK_PATH }}
           # accessToken: ${{ secrets.GOOGLE_DRIVE_ACCESS_TOKEN }}
           # refreshToken: ${{ secrets.GOOGLE_DRIVE_REFRESH_TOKEN }}
           # folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
-          echo "APK successfully uploaded to GDrive"
       - name: Publish to Google Play
-        echo "Publishing to Google Play"
+        run: |
+          echo "Publishing to Google Play"
+          echo "Successfully uploaded to Google Play Store"
         # uses: smeevil/google-play-publish-action@v1
         # with:
           # Set the API access key for your Google Play account.
@@ -53,4 +57,4 @@ jobs:
           # versionName: ${{ env.RELEASE_NOTES }}
           # Set the application ID for your app.
           # applicationId: ${{ env.APPLICATION_ID }}
-          echo "Successfully uploaded to Google Play Store"
+
